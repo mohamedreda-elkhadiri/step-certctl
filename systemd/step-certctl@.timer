@@ -1,0 +1,23 @@
+[Unit]
+Description=Periodic certificate renewal for %i
+Documentation=https://github.com/yourusername/step-certctl
+PartOf=step-certctl@%i.service
+
+[Timer]
+# Run 5 minutes after boot
+OnBootSec=5m
+
+# Run every 6 hours after last activation
+OnUnitActiveSec=6h
+
+# Add random delay to avoid thundering herd
+RandomizedDelaySec=15m
+
+# Allow some timing slack
+AccuracySec=1m
+
+# Persist timer across reboots
+Persistent=true
+
+[Install]
+WantedBy=timers.target

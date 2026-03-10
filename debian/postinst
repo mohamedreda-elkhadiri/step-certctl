@@ -1,0 +1,26 @@
+#!/bin/bash
+set -e
+
+# Create config directory if it doesn't exist
+mkdir -p /etc/step-certctl
+
+# Create root CA directory if it doesn't exist
+mkdir -p /etc/step/certs
+
+# Reload systemd to pick up new service/timer files
+systemctl daemon-reload || true
+
+echo "step-certctl installed successfully"
+echo ""
+echo "Next steps:"
+echo "  1. Copy your Smallstep CA root certificate to /etc/step/certs/root_ca.crt"
+echo "  2. Create a config file in /etc/step-certctl/<name>.conf"
+echo "     (see examples in /usr/share/doc/step-certctl/examples/)"
+echo "  3. Issue your first certificate:"
+echo "     step-certctl issue <name>"
+echo "  4. Enable automatic renewal:"
+echo "     step-certctl install-timer <name>"
+echo ""
+echo "Documentation: step-certctl --help"
+
+exit 0

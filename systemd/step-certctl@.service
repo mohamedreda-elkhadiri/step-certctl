@@ -1,0 +1,25 @@
+[Unit]
+Description=Renew certificate for %i using Smallstep CA
+Documentation=https://github.com/yourusername/step-certctl
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/step-certctl renew %i
+User=root
+Group=root
+
+# Security hardening
+PrivateTmp=yes
+ProtectSystem=full
+NoNewPrivileges=yes
+ReadWritePaths=/etc /run
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=step-certctl-%i
+
+[Install]
+WantedBy=multi-user.target

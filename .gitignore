@@ -1,0 +1,21 @@
+# Build artifacts
+pkg/
+*.deb
+
+# Backup files
+*.bak
+*~
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Test configs (don't commit real configs with secrets)
+/etc/step-certctl/*.conf
+test-configs/
+
+# OS files
+.DS_Store
+Thumbs.db

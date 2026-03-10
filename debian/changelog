@@ -1,0 +1,11 @@
+step-certctl (0.1.0) stable; urgency=low
+
+  * Initial release
+  * Support for certificate issuance and renewal
+  * Config-driven approach with per-certificate config files
+  * Systemd timer-based automatic renewal
+  * Public key comparison to avoid unnecessary service reloads
+  * Support for custom ownership, permissions, and reload commands
+  * Example configs for Proxmox, nginx, HAProxy, and custom apps
+
+ -- Mohamed Reda Elkhadiri <mohamed@elkhadiri.com>  Sun, 09 Mar 2026 21:00:00 +0000

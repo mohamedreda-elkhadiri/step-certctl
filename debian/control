@@ -1,0 +1,20 @@
+Package: step-certctl
+Version: 0.1.0
+Section: admin
+Priority: optional
+Architecture: all
+Depends: step-cli, systemd, openssl, curl
+Maintainer: Mohamed Reda Elkhadiri <mohamed@elkhadiri.com>
+Description: Generic certificate renewal manager for Smallstep CA
+ step-certctl provides a simple, config-driven approach to managing
+ TLS certificates issued by Smallstep CA.
+ .
+ Features:
+  - Config-driven certificate issuance and renewal
+  - Systemd timer-based automatic renewal
+  - Support for multiple certificates per host
+  - Automatic service reloading after renewal
+  - Public key comparison to avoid unnecessary reloads
+ .
+ Ideal for managing certificates across Proxmox nodes, nginx servers,
+ custom applications, and other infrastructure components.

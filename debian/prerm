@@ -1,0 +1,16 @@
+#!/bin/bash
+set -e
+
+# Stop and disable all step-certctl timers before removal
+for timer in /etc/systemd/system/step-certctl@*.timer; do
+    if [ -L "$timer" ]; then
+        instance=$(basename "$timer" | sed 's/step-certctl@\(.*\)\.timer/\1/')
+        echo "Stopping timer for: $instance"
+        systemctl stop "step-certctl@${instance}.timer" 2>/dev/null || true
+        systemctl disable "step-certctl@${instance}.timer" 2>/dev/null || true
+    fi
+done
+
+systemctl daemon-reload || true
+
+exit 0
