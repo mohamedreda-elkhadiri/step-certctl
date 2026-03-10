@@ -165,3 +165,48 @@ EOF
     load_config testsan2
     [ "$SAN" = "alt.local" ]
 }
+
+@test "PROVISIONER defaults to empty when not set" {
+    export CONFIG_DIR
+    # shellcheck disable=SC1090
+    source "$SCRIPT"
+    make_config testprov <<EOF
+CERT_FILE=/tmp/cert.pem
+KEY_FILE=/tmp/key.pem
+CA_URL=https://ca.local
+ROOT_CA=/tmp/root.crt
+COMMON_NAME=myapp.local
+EOF
+    load_config testprov
+    [ "${PROVISIONER}" = "" ]
+}
+
+@test "PROVISIONER_PASSWORD_FILE defaults to empty when not set" {
+    export CONFIG_DIR
+    # shellcheck disable=SC1090
+    source "$SCRIPT"
+    make_config testprovpass <<EOF
+CERT_FILE=/tmp/cert.pem
+KEY_FILE=/tmp/key.pem
+CA_URL=https://ca.local
+ROOT_CA=/tmp/root.crt
+COMMON_NAME=myapp.local
+EOF
+    load_config testprovpass
+    [ "${PROVISIONER_PASSWORD_FILE}" = "" ]
+}
+
+@test "CERT_TEMPLATE defaults to empty when not set" {
+    export CONFIG_DIR
+    # shellcheck disable=SC1090
+    source "$SCRIPT"
+    make_config testtpl <<EOF
+CERT_FILE=/tmp/cert.pem
+KEY_FILE=/tmp/key.pem
+CA_URL=https://ca.local
+ROOT_CA=/tmp/root.crt
+COMMON_NAME=myapp.local
+EOF
+    load_config testtpl
+    [ "${CERT_TEMPLATE}" = "" ]
+}

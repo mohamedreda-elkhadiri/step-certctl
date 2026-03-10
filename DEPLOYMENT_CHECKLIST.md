@@ -46,6 +46,18 @@ Use this checklist when deploying step-certctl to a new node.
   vi /etc/step-certctl/pveproxy.conf
   ```
 
+- [ ] (If using a provisioner password) Create and secure the password file
+  ```bash
+  echo "your-provisioner-password" > /etc/step-certctl/provisioner.pass
+  chmod 600 /etc/step-certctl/provisioner.pass
+  ```
+
+- [ ] (If using a cert template) Place template file and reference it in config
+  ```bash
+  mkdir -p /etc/step-certctl/templates
+  cp /path/to/default.tpl /etc/step-certctl/templates/default.tpl
+  ```
+
 - [ ] Verify config syntax
   ```bash
   source /etc/step-certctl/pveproxy.conf

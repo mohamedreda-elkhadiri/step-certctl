@@ -222,6 +222,47 @@ Shows version and dependency information.
 | `GROUP` | Certificate file group | `root` | `nginx`, `www-data` |
 | `CERT_MODE` | Certificate file permissions | `0644` | `0640` |
 | `KEY_MODE` | Private key file permissions | `0600` | `0600` |
+| `PROVISIONER` | Smallstep CA provisioner name | _(CA default)_ | `my-jwk`, `acme` |
+| `PROVISIONER_PASSWORD_FILE` | Path to provisioner key password file | _(none)_ | `/etc/step-certctl/provisioner.pass` |
+| `CERT_TEMPLATE` | Path to JSON file for certificate subject metadata | _(none)_ | `/etc/step-certctl/templates/default.tpl` |
+
+### Provisioner Configuration
+
+By default `step ca certificate` uses the CA's default provisioner. To select one explicitly and provide its password non-interactively:
+
+```ini
+PROVISIONER=my-jwk-provisioner
+PROVISIONER_PASSWORD_FILE=/etc/step-certctl/provisioner.pass
+```
+
+The password file should be owned by root and mode `0600`:
+
+```bash
+echo "your-provisioner-password" | sudo tee /etc/step-certctl/provisioner.pass
+sudo chmod 600 /etc/step-certctl/provisioner.pass
+```
+
+### Certificate Templates
+
+To embed subject metadata (O, OU, C, etc.) in issued certificates, create a JSON file and reference it with `CERT_TEMPLATE`:
+
+```ini
+CERT_TEMPLATE=/etc/step-certctl/templates/default.tpl
+```
+
+Example template file (`default.tpl`):
+
+```json
+{
+    "O":  "My Org",
+    "OU": "Infrastructure",
+    "C":  "US"
+}
+```
+
+The template is passed to `step ca certificate` via `--set-file`. CN and SANs are always sourced from `COMMON_NAME` and `SAN` in the config — they do not need to be in the template file.
+
+See `examples/templates/default.tpl` for a starter template.
 
 ## Use Cases
 

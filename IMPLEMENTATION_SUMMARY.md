@@ -26,11 +26,12 @@ A production-ready Debian package for managing TLS certificates from Smallstep C
 - **step-certctl@.timer**: Templated timer (6-hour intervals with 15-minute random delay)
 - Security hardened: `PrivateTmp`, `ProtectSystem`, `NoNewPrivileges`
 
-### 3. Example Configurations (4 examples)
+### 3. Example Configurations (4 examples + template)
 - Proxmox pveproxy
 - Nginx
 - HAProxy
 - Custom applications
+- `examples/templates/default.tpl`: starter JSON template for subject metadata (O, OU, C)
 
 ### 4. Documentation
 - **README.md**: Comprehensive 11KB guide
@@ -164,6 +165,8 @@ Each certificate gets its own config file with all parameters:
 - Renewal threshold
 - Reload command
 - Ownership and permissions
+- Provisioner name and password file (optional)
+- Certificate subject template for O, OU, C metadata (optional)
 
 ### 2. Smart Renewal
 - Renews certificates before expiry (8-hour default threshold)
