@@ -3,8 +3,8 @@ set -euo pipefail
 
 VERSION="0.1.0"
 SCRIPT_NAME="step-certctl"
-CONFIG_DIR="/etc/step-certctl"
-LIB_DIR="/usr/lib/step-certctl"
+CONFIG_DIR="${CONFIG_DIR:-/etc/step-certctl}"
+LIB_DIR="${LIB_DIR:-/usr/lib/step-certctl}"
 
 # Source shared functions if available
 if [ -f "${LIB_DIR}/functions.sh" ]; then
@@ -216,7 +216,7 @@ cmd_renew() {
     temp_key=$(mktemp)
 
     # Ensure cleanup
-    trap 'rm -f "${temp_cert}" "${temp_key}"' EXIT
+    trap 'rm -f "${temp_cert:-}" "${temp_key:-}"' EXIT
 
     # Renew certificate to temp location
     local step_cmd=(
@@ -537,4 +537,6 @@ main() {
     esac
 }
 
-main "$@"
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    main "$@"
+fi
