@@ -45,7 +45,7 @@ SCRIPT="$(cd "$BATS_TEST_DIRNAME/.." && pwd)/bin/step-certctl"
 @test "version: exits 0 and prints version number" {
     run "$SCRIPT" version
     [ "$status" -eq 0 ]
-    [[ "$output" == *"0.1.0"* ]]
+    [[ "$output" == *"0.1.1"* ]]
 }
 
 @test "--help: exits 0 and shows usage" {

@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-VERSION="0.1.0"
+VERSION="0.1.1"
 SCRIPT_NAME="step-certctl"
 CONFIG_DIR="${CONFIG_DIR:-/etc/step-certctl}"
 LIB_DIR="${LIB_DIR:-/usr/lib/step-certctl}"
@@ -104,7 +104,12 @@ load_config() {
     done
 
     # Set defaults for optional variables
+    # EXPIRES_IN accepts hours (e.g. 8h, 24h) or days (e.g. 4d, 7d).
+    # Days are converted to hours because the step CLI only supports h/m/s suffixes.
     EXPIRES_IN="${EXPIRES_IN:-8h}"
+    if [[ "${EXPIRES_IN}" =~ ^([0-9]+)d$ ]]; then
+        EXPIRES_IN="$(( ${BASH_REMATCH[1]} * 24 ))h"
+    fi
     RELOAD_CMD="${RELOAD_CMD:-}"
     OWNER="${OWNER:-root}"
     GROUP="${GROUP:-root}"

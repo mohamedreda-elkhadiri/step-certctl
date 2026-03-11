@@ -41,7 +41,7 @@ Generic certificate renewal manager for Smallstep CA. Designed for homelabs and 
 
 ```bash
 # Install the package
-sudo apt install ./step-certctl_0.1.0_all.deb
+sudo apt install ./step-certctl_0.1.1_all.deb
 
 # Copy your Smallstep CA root certificate
 sudo cp root_ca.crt /etc/step/certs/root_ca.crt
@@ -216,7 +216,7 @@ Shows version and dependency information.
 | Variable | Description | Default | Example |
 |----------|-------------|---------|---------|
 | `SAN` | Subject alternative names | `${COMMON_NAME}` | `server.example.com,IP:10.0.0.1` |
-| `EXPIRES_IN` | Certificate lifetime | `8h` | `24h`, `168h` |
+| `EXPIRES_IN` | Certificate lifetime (hours: `8h`, `24h`; days: `1d`, `7d`) | `8h` | `24h`, `4d`, `168h` |
 | `RELOAD_CMD` | Command to run after renewal | _(none)_ | `systemctl reload nginx` |
 | `OWNER` | Certificate file owner | `root` | `nginx`, `www-data` |
 | `GROUP` | Certificate file group | `root` | `nginx`, `www-data` |
@@ -288,7 +288,7 @@ CA_URL=https://stepca.example.com:9000
 ROOT_CA=/etc/step/certs/root_ca.crt
 COMMON_NAME=www.example.com
 SAN=www.example.com,example.com,*.example.com
-EXPIRES_IN=8h
+EXPIRES_IN=8h          # hours (8h, 24h) or days (1d, 7d)
 RELOAD_CMD=systemctl reload nginx
 OWNER=root
 GROUP=root
@@ -303,7 +303,7 @@ KEY_FILE=/opt/myapp/tls/tls.key
 CA_URL=https://stepca.example.com:9000
 ROOT_CA=/etc/step/certs/root_ca.crt
 COMMON_NAME=myapp.example.com
-EXPIRES_IN=8h
+EXPIRES_IN=8h          # hours (8h, 24h) or days (1d, 7d)
 RELOAD_CMD=systemctl restart myapp
 OWNER=myapp
 GROUP=myapp
@@ -402,7 +402,7 @@ sudo step-certctl issue pveproxy
 ./build.sh
 ```
 
-This creates `step-certctl_0.1.0_all.deb`.
+This creates `step-certctl_0.1.1_all.deb`.
 
 ### Manual Build
 
@@ -422,7 +422,7 @@ cp examples/* pkg/usr/share/doc/step-certctl/examples/
 cp debian/* pkg/DEBIAN/
 
 # Build package
-dpkg-deb --build pkg step-certctl_0.1.0_all.deb
+dpkg-deb --build pkg step-certctl_0.1.1_all.deb
 ```
 
 ## Deployment at Scale
@@ -444,7 +444,7 @@ Example playbook:
   tasks:
     - name: Install step-certctl
       apt:
-        deb: /path/to/step-certctl_0.1.0_all.deb
+        deb: /path/to/step-certctl_0.1.1_all.deb
 
     - name: Copy root CA
       copy:
@@ -472,7 +472,7 @@ Host the `.deb` file in a local repository for easier distribution:
 ```bash
 # On repo server
 mkdir -p /var/www/apt/pool/main
-cp step-certctl_0.1.0_all.deb /var/www/apt/pool/main/
+cp step-certctl_0.1.1_all.deb /var/www/apt/pool/main/
 cd /var/www/apt
 dpkg-scanpackages pool/main /dev/null | gzip -9c > dists/stable/main/binary-amd64/Packages.gz
 

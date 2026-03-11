@@ -18,7 +18,7 @@ Get up and running with step-certctl in 5 minutes.
 ./build.sh
 
 # Install it
-sudo apt install ./step-certctl_0.1.0_all.deb
+sudo apt install ./step-certctl_0.1.1_all.deb
 ```
 
 ### Option 2: Quick Install Script
@@ -48,7 +48,7 @@ CA_URL=https://stepca.elkhadiri.net:9000
 ROOT_CA=/etc/step/certs/root_ca.crt
 COMMON_NAME=$(hostname -f)
 SAN=$(hostname -f),$(hostname),IP:$(hostname -I | awk '{print $1}')
-EXPIRES_IN=8h
+EXPIRES_IN=8h          # hours (8h, 24h) or days (1d, 7d)
 RELOAD_CMD=systemctl reload pveproxy
 OWNER=root
 GROUP=www-data
@@ -67,7 +67,7 @@ CA_URL=https://stepca.elkhadiri.net:9000
 ROOT_CA=/etc/step/certs/root_ca.crt
 COMMON_NAME=$(hostname -f)
 SAN=$(hostname -f),$(hostname)
-EXPIRES_IN=8h
+EXPIRES_IN=8h          # hours (8h, 24h) or days (1d, 7d)
 RELOAD_CMD=systemctl reload nginx
 OWNER=root
 GROUP=root
@@ -134,7 +134,7 @@ On each node:
 
 ```bash
 # 1. Install package
-sudo apt install ./step-certctl_0.1.0_all.deb
+sudo apt install ./step-certctl_0.1.1_all.deb
 
 # 2. Copy root CA
 sudo cp root_ca.crt /etc/step/certs/root_ca.crt
@@ -167,12 +167,12 @@ sudo step-certctl install-timer api
   tasks:
     - name: Copy package
       copy:
-        src: step-certctl_0.1.0_all.deb
+        src: step-certctl_0.1.1_all.deb
         dest: /tmp/
 
     - name: Install package
       apt:
-        deb: /tmp/step-certctl_0.1.0_all.deb
+        deb: /tmp/step-certctl_0.1.1_all.deb
 
     - name: Copy root CA
       copy:

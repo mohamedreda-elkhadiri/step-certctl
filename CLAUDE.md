@@ -22,7 +22,7 @@ sudo ./build.sh install
 ./build.sh verify
 ```
 
-The build script assembles files from `bin/`, `lib/`, `systemd/`, `examples/`, and `debian/` into `pkg/`, then calls `dpkg-deb` to produce `step-certctl_0.1.0_all.deb`.
+The build script assembles files from `bin/`, `lib/`, `systemd/`, `examples/`, and `debian/` into `pkg/`, then calls `dpkg-deb` to produce `step-certctl_0.1.1_all.deb`.
 
 ## Architecture
 

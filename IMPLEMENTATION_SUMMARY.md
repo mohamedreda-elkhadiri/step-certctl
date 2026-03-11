@@ -7,7 +7,7 @@ A production-ready Debian package for managing TLS certificates from Smallstep C
 ## Package Details
 
 - **Name**: step-certctl
-- **Version**: 0.1.0
+- **Version**: 0.1.1
 - **Size**: ~9KB (124KB installed)
 - **Architecture**: all (pure shell script)
 - **Package Type**: Debian .deb
@@ -93,17 +93,17 @@ cd /home/reda.debian/code/step-certctl
 ./build.sh
 ```
 
-Output: `step-certctl_0.1.0_all.deb`
+Output: `step-certctl_0.1.1_all.deb`
 
 ### Install on a Node
 
 ```bash
 # Copy package to target node
-scp step-certctl_0.1.0_all.deb root@pve01:/tmp/
+scp step-certctl_0.1.1_all.deb root@pve01:/tmp/
 
 # Install
 ssh root@pve01
-apt install /tmp/step-certctl_0.1.0_all.deb
+apt install /tmp/step-certctl_0.1.1_all.deb
 
 # Copy root CA
 cp root_ca.crt /etc/step/certs/root_ca.crt
@@ -123,8 +123,8 @@ step-certctl install-timer pveproxy
 **Option 1: Manual**
 ```bash
 for node in pve01 pve02 pve03 pve04 pve05 pve06 pve07; do
-  scp step-certctl_0.1.0_all.deb root@${node}:/tmp/
-  ssh root@${node} "apt install -y /tmp/step-certctl_0.1.0_all.deb"
+  scp step-certctl_0.1.1_all.deb root@${node}:/tmp/
+  ssh root@${node} "apt install -y /tmp/step-certctl_0.1.1_all.deb"
 done
 ```
 
@@ -134,7 +134,7 @@ done
   tasks:
     - name: Install step-certctl
       apt:
-        deb: ./step-certctl_0.1.0_all.deb
+        deb: ./step-certctl_0.1.1_all.deb
 
     - name: Copy root CA
       copy:
@@ -374,8 +374,8 @@ Recommended git repository structure:
 ```bash
 git init
 git add .
-git commit -m "Initial release of step-certctl v0.1.0"
-git tag v0.1.0
+git commit -m "Initial release of step-certctl v0.1.1"
+git tag v0.1.1
 ```
 
 ## Conclusion

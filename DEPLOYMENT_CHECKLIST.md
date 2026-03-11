@@ -4,7 +4,7 @@ Use this checklist when deploying step-certctl to a new node.
 
 ## Pre-Deployment
 
-- [ ] Package built successfully: `step-certctl_0.1.0_all.deb` exists
+- [ ] Package built successfully: `step-certctl_0.1.1_all.deb` exists
 - [ ] You have the Smallstep CA root certificate (`root_ca.crt`)
 - [ ] You have access to the Smallstep CA at the configured URL
 - [ ] Target node is Debian-based (Debian, Ubuntu, Proxmox VE)
@@ -14,13 +14,13 @@ Use this checklist when deploying step-certctl to a new node.
 
 - [ ] Copy package to target node
   ```bash
-  scp step-certctl_0.1.0_all.deb root@node:/tmp/
+  scp step-certctl_0.1.1_all.deb root@node:/tmp/
   ```
 
 - [ ] Install the package
   ```bash
   ssh root@node
-  apt install /tmp/step-certctl_0.1.0_all.deb
+  apt install /tmp/step-certctl_0.1.1_all.deb
   ```
 
 - [ ] Verify installation
