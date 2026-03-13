@@ -224,13 +224,11 @@ cmd_renew() {
     # Create temp file for new cert
     local temp_cert
     temp_cert=$(mktemp)
-    local temp_key
-    temp_key=$(mktemp)
 
     # Ensure cleanup
-    trap 'rm -f "${temp_cert:-}" "${temp_key:-}"' EXIT
+    trap 'rm -f "${temp_cert:-}"' EXIT
 
-    # Renew certificate to temp location
+    # Renew certificate to temp location (key is unchanged by renewal)
     local step_cmd=(
         step ca renew
         "${CERT_FILE}"
@@ -239,7 +237,6 @@ cmd_renew() {
         --root="${ROOT_CA}"
         --expires-in="${EXPIRES_IN}"
         --out="${temp_cert}"
-        --key="${temp_key}"
         --force
     )
 
@@ -247,7 +244,7 @@ cmd_renew() {
 
     if ! "${step_cmd[@]}"; then
         log_error "Failed to renew certificate"
-        rm -f "${temp_cert}" "${temp_key}"
+        rm -f "${temp_cert}"
         return 1
     fi
 
@@ -262,15 +259,12 @@ cmd_renew() {
             log_info "Backed up old certificate"
         fi
 
-        # Move new cert into place
+        # Move new cert into place (key is unchanged by renewal)
         mv "${temp_cert}" "${CERT_FILE}"
-        mv "${temp_key}" "${KEY_FILE}"
 
         # Set ownership and permissions
         chown "${OWNER}:${GROUP}" "${CERT_FILE}"
-        chown "${OWNER}:${GROUP}" "${KEY_FILE}"
         chmod "${CERT_MODE}" "${CERT_FILE}"
-        chmod "${KEY_MODE}" "${KEY_FILE}"
 
         log_success "Certificate renewed successfully"
 
@@ -285,7 +279,7 @@ cmd_renew() {
         fi
     else
         log_info "Certificate unchanged, skipping reload"
-        rm -f "${temp_cert}" "${temp_key}"
+        rm -f "${temp_cert}"
     fi
 
     return 0
