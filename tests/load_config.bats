@@ -166,6 +166,35 @@ EOF
     [ "$SAN" = "alt.local" ]
 }
 
+@test "SAN with IP: prefix exits 1 with clear error" {
+    make_config testsan_ip <<EOF
+CERT_FILE=/tmp/cert.pem
+KEY_FILE=/tmp/key.pem
+CA_URL=https://ca.local
+ROOT_CA=/tmp/root.crt
+COMMON_NAME=myapp.local
+SAN=myapp.local,IP:10.0.0.1
+EOF
+    run env CONFIG_DIR="$CONFIG_DIR" "$SCRIPT" validate testsan_ip
+    [ "$status" -eq 1 ]
+    [[ "$output" == *"IP:"* ]]
+    [[ "$output" == *"bare IP"* ]]
+}
+
+@test "SAN with only commas exits 1 with clear error" {
+    make_config testsan_empty <<EOF
+CERT_FILE=/tmp/cert.pem
+KEY_FILE=/tmp/key.pem
+CA_URL=https://ca.local
+ROOT_CA=/tmp/root.crt
+COMMON_NAME=myapp.local
+SAN=,,,
+EOF
+    run env CONFIG_DIR="$CONFIG_DIR" "$SCRIPT" validate testsan_empty
+    [ "$status" -eq 1 ]
+    [[ "$output" == *"no valid entries"* ]]
+}
+
 @test "PROVISIONER defaults to empty when not set" {
     export CONFIG_DIR
     # shellcheck disable=SC1090

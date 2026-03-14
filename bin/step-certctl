@@ -116,6 +116,25 @@ load_config() {
     CERT_MODE="${CERT_MODE:-0644}"
     KEY_MODE="${KEY_MODE:-0600}"
     SAN="${SAN:-${COMMON_NAME}}"
+
+    # Validate SAN entries
+    local san_valid=0
+    IFS=',' read -ra _san_check <<< "${SAN}"
+    for _san in "${_san_check[@]}"; do
+        _san="${_san#"${_san%%[! ]*}"}"
+        _san="${_san%"${_san##*[! ]}"}"
+        [[ -z "${_san}" ]] && continue
+        if [[ "${_san}" =~ ^[Ii][Pp]: ]]; then
+            log_error "Invalid SAN '${_san}': remove the 'IP:' prefix — use bare IP addresses (e.g. 10.0.0.1)"
+            return 1
+        fi
+        san_valid=1
+    done
+    if [[ "${san_valid}" -eq 0 ]]; then
+        log_error "SAN contains no valid entries"
+        return 1
+    fi
+
     PROVISIONER="${PROVISIONER:-}"
     PROVISIONER_PASSWORD_FILE="${PROVISIONER_PASSWORD_FILE:-}"
     CERT_TEMPLATE="${CERT_TEMPLATE:-}"
