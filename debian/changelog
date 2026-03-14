@@ -1,3 +1,12 @@
+step-certctl (0.1.3) stable; urgency=low
+
+  * Fix: detect when step ca renew skips renewal (expires-in threshold not
+    met) and exit cleanly instead of overwriting with empty temp file
+  * Fix: make certificate backup non-fatal so pmxcfs (Proxmox) read-only
+    filesystem errors don't abort a successful renewal
+
+ -- Mohamed Reda Elkhadiri <mohamed@elkhadiri.com>  Fri, 14 Mar 2026 00:00:00 +0000
+
 step-certctl (0.1.2) stable; urgency=low
 
   * Fix: remove invalid --key flag from step ca renew (caused "too many

@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-VERSION="0.1.2"
+VERSION="0.1.3"
 SCRIPT_NAME="step-certctl"
 CONFIG_DIR="${CONFIG_DIR:-/etc/step-certctl}"
 LIB_DIR="${LIB_DIR:-/usr/lib/step-certctl}"
@@ -245,15 +245,24 @@ cmd_renew() {
         return 1
     fi
 
+    # step ca renew exits 0 but writes nothing when --expires-in threshold is not met
+    if ! openssl x509 -in "${temp_cert}" -noout 2>/dev/null; then
+        log_info "Certificate not yet due for renewal"
+        rm -f "${temp_cert}"
+        return 0
+    fi
+
     # Check if certificate actually changed
     if certs_are_different "${CERT_FILE}" "${temp_cert}"; then
         log_info "Certificate has changed, updating"
 
-        # Backup old cert
+        # Backup old cert (best-effort: some filesystems like pmxcfs don't allow new files)
         if [ -f "${CERT_FILE}" ]; then
-            cp "${CERT_FILE}" "${CERT_FILE}.bak"
-            cp "${KEY_FILE}" "${KEY_FILE}.bak"
-            log_info "Backed up old certificate"
+            if cp "${CERT_FILE}" "${CERT_FILE}.bak" && cp "${KEY_FILE}" "${KEY_FILE}.bak"; then
+                log_info "Backed up old certificate"
+            else
+                log_warn "Could not back up old certificate (continuing anyway)"
+            fi
         fi
 
         # Move new cert into place (key is unchanged by renewal)
