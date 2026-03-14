@@ -2,7 +2,7 @@
 set -euo pipefail
 
 PACKAGE_NAME="step-certctl"
-VERSION="0.1.3"
+VERSION="0.1.4"
 ARCH="all"
 BUILD_DIR="pkg"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

@@ -1,3 +1,12 @@
+step-certctl (0.1.4) stable; urgency=low
+
+  * Fix: split SAN config on commas into separate --san flags; previously
+    the entire string was passed as one flag causing malformed SANs
+  * Fix: trim leading/trailing whitespace from each SAN entry
+  * Fix: skip empty SAN entries from trailing commas
+
+ -- Mohamed Reda Elkhadiri <mohamed@elkhadiri.com>  Sat, 14 Mar 2026 00:00:00 +0000
+
 step-certctl (0.1.3) stable; urgency=low
 
   * Fix: detect when step ca renew skips renewal (expires-in threshold not

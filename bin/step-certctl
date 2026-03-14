@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-VERSION="0.1.3"
+VERSION="0.1.4"
 SCRIPT_NAME="step-certctl"
 CONFIG_DIR="${CONFIG_DIR:-/etc/step-certctl}"
 LIB_DIR="${LIB_DIR:-/usr/lib/step-certctl}"
@@ -175,10 +175,17 @@ cmd_issue() {
         "${KEY_FILE}"
         --ca-url="${CA_URL}"
         --root="${ROOT_CA}"
-        --san="${SAN}"
         --not-after="${EXPIRES_IN}"
         --force
     )
+
+    # Add each SAN as a separate --san flag (step-cli requires one flag per entry)
+    IFS=',' read -ra san_list <<< "${SAN}"
+    for san in "${san_list[@]}"; do
+        san="${san#"${san%%[! ]*}"}"  # trim leading whitespace
+        san="${san%"${san##*[! ]}"}"  # trim trailing whitespace
+        [[ -n "${san}" ]] && step_cmd+=(--san="${san}")
+    done
 
     [[ -n "${PROVISIONER}" ]] && step_cmd+=(--provisioner="${PROVISIONER}")
     [[ -n "${PROVISIONER_PASSWORD_FILE}" ]] && step_cmd+=(--provisioner-password-file="${PROVISIONER_PASSWORD_FILE}")
