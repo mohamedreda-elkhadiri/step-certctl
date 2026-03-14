@@ -75,7 +75,7 @@ ROOT_CA=/etc/step/certs/root_ca.crt
 
 # Certificate details
 COMMON_NAME=pve01.example.com
-SAN=pve01.example.com,pve01,IP:10.0.0.10
+SAN=pve01.example.com,pve01,10.0.0.10
 
 # Renewal settings
 EXPIRES_IN=8h
@@ -215,7 +215,7 @@ Shows version and dependency information.
 
 | Variable | Description | Default | Example |
 |----------|-------------|---------|---------|
-| `SAN` | Subject alternative names | `${COMMON_NAME}` | `server.example.com,IP:10.0.0.1` |
+| `SAN` | Subject alternative names (comma-separated; use bare IPs — step-cli auto-detects; quote the value if it contains spaces) | `${COMMON_NAME}` | `server.example.com,server,10.0.0.1` |
 | `EXPIRES_IN` | Certificate lifetime (hours: `8h`, `24h`; days: `1d`, `7d`) | `8h` | `24h`, `4d`, `168h` |
 | `RELOAD_CMD` | Command to run after renewal | _(none)_ | `systemctl reload nginx` |
 | `OWNER` | Certificate file owner | `root` | `nginx`, `www-data` |

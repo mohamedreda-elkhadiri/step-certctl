@@ -109,6 +109,88 @@ EOF
     [[ "$(step_calls)" != *"--set-file"* ]]
 }
 
+@test "issue: single SAN passes one --san flag" {
+    make_recording_mock step
+    make_config myapp <<EOF
+CERT_FILE=$CERT_DIR/cert.pem
+KEY_FILE=$CERT_DIR/key.pem
+CA_URL=https://ca.local
+ROOT_CA=$CERT_DIR/root.crt
+COMMON_NAME=myapp.local
+SAN=myapp.local
+EOF
+    run env CONFIG_DIR="$CONFIG_DIR" "$SCRIPT" issue myapp
+    [ "$status" -eq 0 ]
+    [[ "$(step_calls)" == *"--san=myapp.local"* ]]
+}
+
+@test "issue: multiple SANs each become a separate --san flag" {
+    make_recording_mock step
+    make_config myapp <<EOF
+CERT_FILE=$CERT_DIR/cert.pem
+KEY_FILE=$CERT_DIR/key.pem
+CA_URL=https://ca.local
+ROOT_CA=$CERT_DIR/root.crt
+COMMON_NAME=myapp.local
+SAN=myapp.local,myapp,10.0.0.1
+EOF
+    run env CONFIG_DIR="$CONFIG_DIR" "$SCRIPT" issue myapp
+    [ "$status" -eq 0 ]
+    [[ "$(step_calls)" == *"--san=myapp.local"* ]]
+    [[ "$(step_calls)" == *"--san=myapp"* ]]
+    [[ "$(step_calls)" == *"--san=10.0.0.1"* ]]
+}
+
+@test "issue: SANs with spaces are trimmed when config value is quoted" {
+    make_recording_mock step
+    make_config myapp <<EOF
+CERT_FILE=$CERT_DIR/cert.pem
+KEY_FILE=$CERT_DIR/key.pem
+CA_URL=https://ca.local
+ROOT_CA=$CERT_DIR/root.crt
+COMMON_NAME=myapp.local
+SAN="myapp.local, myapp, 10.0.0.1"
+EOF
+    run env CONFIG_DIR="$CONFIG_DIR" "$SCRIPT" issue myapp
+    [ "$status" -eq 0 ]
+    [[ "$(step_calls)" == *"--san=myapp.local"* ]]
+    [[ "$(step_calls)" == *"--san=myapp"* ]]
+    [[ "$(step_calls)" == *"--san=10.0.0.1"* ]]
+    [[ "$(step_calls)" != *"--san= "* ]]
+}
+
+@test "issue: trailing comma in SAN is ignored" {
+    make_recording_mock step
+    make_config myapp <<EOF
+CERT_FILE=$CERT_DIR/cert.pem
+KEY_FILE=$CERT_DIR/key.pem
+CA_URL=https://ca.local
+ROOT_CA=$CERT_DIR/root.crt
+COMMON_NAME=myapp.local
+SAN=myapp.local,myapp,
+EOF
+    run env CONFIG_DIR="$CONFIG_DIR" "$SCRIPT" issue myapp
+    [ "$status" -eq 0 ]
+    [[ "$(step_calls)" == *"--san=myapp.local"* ]]
+    [[ "$(step_calls)" == *"--san=myapp"* ]]
+}
+
+@test "issue: bare IPv4 and IPv6 addresses passed as-is" {
+    make_recording_mock step
+    make_config myapp <<EOF
+CERT_FILE=$CERT_DIR/cert.pem
+KEY_FILE=$CERT_DIR/key.pem
+CA_URL=https://ca.local
+ROOT_CA=$CERT_DIR/root.crt
+COMMON_NAME=myapp.local
+SAN=myapp.local,10.0.0.1,fd1a:fade:bead::1
+EOF
+    run env CONFIG_DIR="$CONFIG_DIR" "$SCRIPT" issue myapp
+    [ "$status" -eq 0 ]
+    [[ "$(step_calls)" == *"--san=10.0.0.1"* ]]
+    [[ "$(step_calls)" == *"--san=fd1a:fade:bead::1"* ]]
+}
+
 @test "issue: all three optional flags passed together" {
     make_recording_mock step
     local pass_file="$TEST_DIR/provisioner.pass"

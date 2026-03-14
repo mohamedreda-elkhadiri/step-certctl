@@ -1,3 +1,13 @@
+step-certctl (0.1.5) stable; urgency=low
+
+  * Fix: remove IP: prefix support from SAN config — bare IPs are passed
+    directly and step-cli auto-detects them by format
+  * Docs: update all example configs and README to use bare IP addresses
+  * Test: add SAN handling tests (single, multiple, spaces, trailing comma,
+    bare IPv4/IPv6); fix version test to not hardcode version number
+
+ -- Mohamed Reda Elkhadiri <mohamed@elkhadiri.com>  Sat, 14 Mar 2026 00:00:00 +0000
+
 step-certctl (0.1.4) stable; urgency=low
 
   * Fix: split SAN config on commas into separate --san flags; previously
