@@ -1,3 +1,13 @@
+step-certctl (0.1.2) stable; urgency=low
+
+  * Fix: remove invalid --key flag from step ca renew (caused "too many
+    positional arguments" with step-cli 0.28.7)
+  * Docs: document pmxcfs permission limits for Proxmox pveproxy configs
+  * Docs: add troubleshooting for mTLS renewal failure due to missing
+    clientAuth in CA provisioner template
+
+ -- Mohamed Reda Elkhadiri <mohamed@elkhadiri.com>  Fri, 13 Mar 2026 00:00:00 +0000
+
 step-certctl (0.1.1) stable; urgency=low
 
   * Fix: accept days suffix (e.g. 4d) in EXPIRES_IN by converting to hours
