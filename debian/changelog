@@ -1,3 +1,10 @@
+step-certctl (0.1.6) stable; urgency=low
+
+  * Feat: validate SAN entries in load_config — error on IP: prefix with
+    actionable message, error on empty SAN after splitting
+
+ -- Mohamed Reda Elkhadiri <mohamed@elkhadiri.com>  Sat, 14 Mar 2026 00:00:00 +0000
+
 step-certctl (0.1.5) stable; urgency=low
 
   * Fix: remove IP: prefix support from SAN config — bare IPs are passed
