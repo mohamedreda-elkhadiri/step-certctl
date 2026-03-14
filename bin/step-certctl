@@ -190,13 +190,10 @@ cmd_issue() {
         log_success "Certificate issued successfully"
 
         # Set ownership and permissions
-        chown "${OWNER}:${GROUP}" "${CERT_FILE}"
-        chown "${OWNER}:${GROUP}" "${KEY_FILE}"
+        chown "${OWNER}:${GROUP}" "${CERT_FILE}" "${KEY_FILE}"
         chmod "${CERT_MODE}" "${CERT_FILE}"
         chmod "${KEY_MODE}" "${KEY_FILE}"
-
-        log_info "Set ownership to ${OWNER}:${GROUP}"
-        log_info "Set permissions: cert=${CERT_MODE}, key=${KEY_MODE}"
+        log_info "Set ownership to ${OWNER}:${GROUP}, permissions: cert=${CERT_MODE}, key=${KEY_MODE}"
 
         # Run reload command if specified
         if [ -n "${RELOAD_CMD}" ]; then
@@ -265,6 +262,7 @@ cmd_renew() {
         # Set ownership and permissions
         chown "${OWNER}:${GROUP}" "${CERT_FILE}"
         chmod "${CERT_MODE}" "${CERT_FILE}"
+        log_info "Set ownership to ${OWNER}:${GROUP}, permissions: cert=${CERT_MODE}"
 
         log_success "Certificate renewed successfully"
 

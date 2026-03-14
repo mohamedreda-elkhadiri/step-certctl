@@ -278,6 +278,17 @@ step-certctl issue pveproxy
 step-certctl install-timer pveproxy
 ```
 
+**Proxmox-specific notes:**
+
+- `/etc/pve/local/` is a FUSE filesystem (`pmxcfs`) that manages its own permissions — `OWNER`, `GROUP`, `CERT_MODE`, and `KEY_MODE` have no effect there and should be omitted from the config.
+- Your Smallstep CA provisioner template must include `clientAuth` in the Extended Key Usage. Without it, mTLS renewal will fail with `tls: bad certificate`. Example template:
+  ```json
+  {
+    "extKeyUsage": ["serverAuth", "clientAuth"]
+  }
+  ```
+  After updating the template, re-issue the certificate once — existing certs are not retroactively updated.
+
 ### Nginx Web Servers
 
 ```bash
@@ -382,6 +393,26 @@ ls -la /etc/pve/local/pveproxy-ssl.*
 # Re-issue to fix permissions
 sudo step-certctl issue pveproxy
 ```
+
+If you see `chmod: Operation not permitted` on Proxmox, the cert files are on `pmxcfs` which controls permissions itself. Remove `OWNER`, `GROUP`, `CERT_MODE`, and `KEY_MODE` from the config — pmxcfs already sets `0640 root:www-data` which is correct for pveproxy.
+
+### mTLS Renewal Failing (`tls: bad certificate`)
+
+If renewal fails with `tls: bad certificate` or `x509: certificate specifies an incompatible key usage`, the certificate's Extended Key Usage is missing `clientAuth`. The CA provisioner template only included `serverAuth`.
+
+Fix on the CA server — update the provisioner template to include both:
+```json
+{
+  "extKeyUsage": ["serverAuth", "clientAuth"]
+}
+```
+
+Then re-issue the certificate to pick up the new EKU:
+```bash
+sudo step-certctl issue pveproxy
+```
+
+Renewals will work automatically after that.
 
 ### Service Not Reloading
 
