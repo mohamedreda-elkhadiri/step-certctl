@@ -1,3 +1,12 @@
+step-certctl (0.1.7) stable; urgency=high
+
+  * Fix: compare certificate serial numbers instead of public keys in
+    certs_are_different — public keys are identical after renewal (same key
+    pair), causing every renewal to be silently discarded and the cert to
+    eventually expire
+
+ -- Mohamed Reda Elkhadiri <mohamed@elkhadiri.com>  Sat, 14 Mar 2026 00:00:00 +0000
+
 step-certctl (0.1.6) stable; urgency=low
 
   * Feat: validate SAN entries in load_config — error on IP: prefix with

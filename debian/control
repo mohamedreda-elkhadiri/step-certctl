@@ -1,5 +1,5 @@
 Package: step-certctl
-Version: 0.1.6
+Version: 0.1.7
 Section: admin
 Priority: optional
 Architecture: all
@@ -14,7 +14,7 @@ Description: Generic certificate renewal manager for Smallstep CA
   - Systemd timer-based automatic renewal
   - Support for multiple certificates per host
   - Automatic service reloading after renewal
-  - Public key comparison to avoid unnecessary reloads
+  - Serial number comparison to avoid unnecessary reloads
  .
  Ideal for managing certificates across Proxmox nodes, nginx servers,
  custom applications, and other infrastructure components.

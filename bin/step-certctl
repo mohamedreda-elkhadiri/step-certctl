@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-VERSION="0.1.6"
+VERSION="0.1.7"
 SCRIPT_NAME="step-certctl"
 CONFIG_DIR="${CONFIG_DIR:-/etc/step-certctl}"
 LIB_DIR="${LIB_DIR:-/usr/lib/step-certctl}"
@@ -158,13 +158,13 @@ certs_are_different() {
         return 0  # No old cert, they're different
     fi
 
-    local old_pubkey
-    local new_pubkey
+    local old_serial
+    local new_serial
 
-    old_pubkey=$(get_pubkey_from_cert "${old_cert}")
-    new_pubkey=$(get_pubkey_from_cert "${new_cert}")
+    old_serial=$(openssl x509 -in "${old_cert}" -noout -serial 2>/dev/null || echo "")
+    new_serial=$(openssl x509 -in "${new_cert}" -noout -serial 2>/dev/null || echo "")
 
-    if [ "${old_pubkey}" != "${new_pubkey}" ]; then
+    if [ "${old_serial}" != "${new_serial}" ]; then
         return 0  # Different
     else
         return 1  # Same
