@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-VERSION="0.1.7"
+VERSION="0.1.8"
 SCRIPT_NAME="step-certctl"
 CONFIG_DIR="${CONFIG_DIR:-/etc/step-certctl}"
 LIB_DIR="${LIB_DIR:-/usr/lib/step-certctl}"
@@ -292,8 +292,11 @@ cmd_renew() {
             fi
         fi
 
-        # Move new cert into place (key is unchanged by renewal)
-        mv "${temp_cert}" "${CERT_FILE}"
+        # Copy new cert into place (key is unchanged by renewal)
+        # cp overwrites the existing file in-place, which works on pmxcfs;
+        # mv would fail with "inter-device move" on cross-filesystem paths.
+        cp "${temp_cert}" "${CERT_FILE}"
+        rm -f "${temp_cert}"
 
         # Set ownership and permissions
         chown "${OWNER}:${GROUP}" "${CERT_FILE}"

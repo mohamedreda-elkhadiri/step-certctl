@@ -1,3 +1,11 @@
+step-certctl (0.1.8) stable; urgency=high
+
+  * Fix: use cp+rm instead of mv to install renewed cert — mv fails with
+    "inter-device move" on pmxcfs (/etc/pve/local); cp overwrites the
+    existing file in-place which pmxcfs permits
+
+ -- Mohamed Reda Elkhadiri <mohamed@elkhadiri.com>  Sun, 15 Mar 2026 00:00:00 +0000
+
 step-certctl (0.1.7) stable; urgency=high
 
   * Fix: compare certificate serial numbers instead of public keys in
