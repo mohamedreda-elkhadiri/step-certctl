@@ -1,3 +1,12 @@
+step-certctl (0.1.9) stable; urgency=high
+
+  * Fix: explicitly list /etc/pve and /etc/step-certctl in ReadWritePaths
+    instead of /etc — ProtectSystem=full sets up a new mount namespace and
+    FUSE submounts (pmxcfs at /etc/pve) are not accessible through the
+    broad /etc rebind, causing cp to fail with "Read-only file system"
+
+ -- Mohamed Reda Elkhadiri <mohamed@elkhadiri.com>  Thu, 20 Mar 2026 00:00:00 +0000
+
 step-certctl (0.1.8) stable; urgency=high
 
   * Fix: use cp+rm instead of mv to install renewed cert — mv fails with

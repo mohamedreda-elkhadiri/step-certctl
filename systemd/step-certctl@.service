@@ -14,7 +14,7 @@ Group=root
 PrivateTmp=yes
 ProtectSystem=full
 NoNewPrivileges=yes
-ReadWritePaths=/etc /run
+ReadWritePaths=/etc/pve /etc/step-certctl /run
 
 # Logging
 StandardOutput=journal
