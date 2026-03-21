@@ -1,3 +1,11 @@
+step-certctl (0.1.10) stable; urgency=high
+
+  * Fix: make chown/chmod non-fatal in cmd_renew — pmxcfs does not support
+    permission changes; failure was aborting the service after a successful
+    cert write, preventing RELOAD_CMD from running
+
+ -- Mohamed Reda Elkhadiri <mohamed@elkhadiri.com>  Thu, 20 Mar 2026 00:00:00 +0000
+
 step-certctl (0.1.9) stable; urgency=high
 
   * Fix: explicitly list /etc/pve and /etc/step-certctl in ReadWritePaths

@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-VERSION="0.1.9"
+VERSION="0.1.10"
 SCRIPT_NAME="step-certctl"
 CONFIG_DIR="${CONFIG_DIR:-/etc/step-certctl}"
 LIB_DIR="${LIB_DIR:-/usr/lib/step-certctl}"
@@ -298,10 +298,12 @@ cmd_renew() {
         cp "${temp_cert}" "${CERT_FILE}"
         rm -f "${temp_cert}"
 
-        # Set ownership and permissions
-        chown "${OWNER}:${GROUP}" "${CERT_FILE}"
-        chmod "${CERT_MODE}" "${CERT_FILE}"
-        log_info "Set ownership to ${OWNER}:${GROUP}, permissions: cert=${CERT_MODE}"
+        # Set ownership and permissions (best-effort: pmxcfs does not support chmod/chown)
+        if chown "${OWNER}:${GROUP}" "${CERT_FILE}" && chmod "${CERT_MODE}" "${CERT_FILE}"; then
+            log_info "Set ownership to ${OWNER}:${GROUP}, permissions: cert=${CERT_MODE}"
+        else
+            log_warn "Could not set ownership/permissions on ${CERT_FILE} (continuing anyway)"
+        fi
 
         log_success "Certificate renewed successfully"
 
